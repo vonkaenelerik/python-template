@@ -1,0 +1,41 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pr:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: "ubuntu-latest"
+
+strategy:
+  matrix:
+    Python311:
+      python.version: "3.11"
+    Python312:
+      python.version: "3.12"
+    Python313:
+      python.version: "3.13"
+
+steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: "$(python.version)"
+    displayName: "Use Python $(python.version)"
+
+  - script: |
+      curl -LsSf https://astral.sh/uv/install.sh | sh
+      echo "##vso[task.prependpath]$HOME/.local/bin"
+    displayName: "Install uv"
+
+  - script: uv sync
+    displayName: "Install dependencies"
+
+  - script: uv run pre-commit run --all-files
+    displayName: "Run pre-commit"
+
+  - script: uv run pytest
+    displayName: "Run tests"
