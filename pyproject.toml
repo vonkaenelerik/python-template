@@ -35,7 +35,61 @@ target-version = "py311"
 line-length = 88
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "I", "UP", "B", "SIM", "N"]
+select = [
+    "E", "W",     # pycodestyle
+    "F",           # pyflakes
+    "I",           # isort
+    "UP",          # pyupgrade
+    "B",           # flake8-bugbear
+    "SIM",         # flake8-simplify
+    "N",           # pep8-naming
+    "ANN",         # flake8-annotations
+    "D",           # pydocstyle
+    "RUF",         # ruff-specific
+    "S",           # flake8-bandit (security)
+    "C4",          # flake8-comprehensions
+    "PT",          # flake8-pytest-style
+    "RET",         # flake8-return
+    "ARG",         # flake8-unused-arguments
+    "TCH",         # flake8-type-checking
+    "PIE",         # flake8-pie
+    "PL",          # pylint
+    "PERF",        # perflint
+    "FBT",         # flake8-boolean-trap
+    "DTZ",         # flake8-datetimez
+    "A",           # flake8-builtins
+    "RSE",         # flake8-raise
+    "SLF",         # flake8-self
+    "ERA",         # eradicate
+    "COM",         # flake8-commas
+]
+ignore = [
+    "D203",        # conflicts with D211 (no-blank-line-before-class)
+    "D213",        # conflicts with D212 (multi-line-summary-second-line)
+    "COM812",      # conflicts with ruff formatter
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = [
+    "ANN",     # no type annotations required in tests
+    "D",       # no docstrings required in tests
+    "S101",    # allow assert in tests
+    "ARG",     # allow unused arguments (fixtures)
+    "PLR2004", # allow magic values in tests
+]
+"scripts/**/*.py" = [
+    "S603",    # subprocess calls are intentional in scripts
+    "S607",    # partial paths are fine for CLI tools
+    "PLR2004", # magic values in arg parsing
+]
+".claude/hooks/**/*.py" = [
+    "S603",    # subprocess calls are the point of hooks
+    "S607",    # partial paths are fine for CLI tools
+    "PLR2004", # magic values in arg parsing
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
 
 [tool.ruff.format]
 quote-style = "double"

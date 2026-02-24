@@ -11,6 +11,7 @@ from pathlib import Path
 
 
 def lint_python(file_path: str) -> None:
+    """Lint a Python file with ruff, blocking on errors."""
     path = Path(file_path)
 
     if path.suffix != ".py":
@@ -25,6 +26,7 @@ def lint_python(file_path: str) -> None:
             capture_output=True,
             text=True,
             timeout=30,
+            check=False,
         )
         if result.returncode != 0 and result.stdout:
             print(f"Lint errors in {path.name}:", file=sys.stderr)
@@ -37,6 +39,7 @@ def lint_python(file_path: str) -> None:
                 capture_output=True,
                 text=True,
                 timeout=30,
+                check=False,
             )
             if result.returncode != 0 and result.stdout:
                 print(f"Lint errors in {path.name}:", file=sys.stderr)

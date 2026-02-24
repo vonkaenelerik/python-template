@@ -50,6 +50,25 @@ uv run mypy src/
 uv run pre-commit run --all-files
 ```
 
+### VSCode
+
+This project includes workspace settings for VSCode. On first open, install the recommended extensions when prompted (or run `Extensions: Show Recommended Extensions` from the command palette).
+
+**Included extensions:**
+- [Ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff) — Linting and formatting (replaces Pylint, Black, isort)
+- [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python) — Language support, testing UI, debugging
+- [Mypy Type Checker](https://marketplace.visualstudio.com/items?itemName=ms-python.mypy-type-checker) — Inline type error reporting
+
+**What's preconfigured:**
+- Format on save with Ruff
+- Lint errors shown inline as you type
+- Import sorting on save
+- mypy strict mode errors shown inline
+- pytest integration in the Testing sidebar
+- Interpreter set to the `.venv` created by `uv sync`
+
+> **Note:** You must run `uv sync` before opening in VSCode so the `.venv` and all tools are available.
+
 ### Renaming the package
 
 To rename from `my-package` to your own package name:

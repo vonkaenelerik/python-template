@@ -61,10 +61,7 @@ def derive_import_name(name: str) -> str:
 
 def replace_in_file(
     path: Path,
-    old_name: str,
-    new_name: str,
-    old_import: str,
-    new_import: str,
+    replacements: dict[str, str],
     *,
     dry_run: bool,
 ) -> bool:
@@ -73,7 +70,9 @@ def replace_in_file(
         return False
 
     content = path.read_text(encoding="utf-8")
-    new_content = content.replace(old_name, new_name).replace(old_import, new_import)
+    new_content = content
+    for old, new in replacements.items():
+        new_content = new_content.replace(old, new)
 
     if content == new_content:
         return False
@@ -109,6 +108,7 @@ def rename_directory(old: Path, new: Path, *, dry_run: bool) -> bool:
 
 
 def main() -> None:
+    """Rename my-package to a custom package name."""
     parser = argparse.ArgumentParser(
         description="Rename my-package to a custom package name."
     )
@@ -148,28 +148,20 @@ def main() -> None:
         print()
 
     modified = 0
+    replacements = {OLD_NAME: new_name, OLD_IMPORT_NAME: new_import}
 
     # Phase 1: Text replacements in known files
     print("Updating file contents:")
     for rel_path in FILES_TO_UPDATE:
         path = ROOT / rel_path
-        if replace_in_file(
-            path, OLD_NAME, new_name, OLD_IMPORT_NAME, new_import, dry_run=dry_run
-        ):
+        if replace_in_file(path, replacements, dry_run=dry_run):
             modified += 1
 
     # Phase 2: Update .claude/commands/ files
     commands_dir = ROOT / COMMAND_DIR
     if commands_dir.exists():
         for cmd_file in sorted(commands_dir.glob("*.md")):
-            if replace_in_file(
-                cmd_file,
-                OLD_NAME,
-                new_name,
-                OLD_IMPORT_NAME,
-                new_import,
-                dry_run=dry_run,
-            ):
+            if replace_in_file(cmd_file, replacements, dry_run=dry_run):
                 modified += 1
 
     # Phase 3: Rename source directory

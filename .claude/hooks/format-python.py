@@ -8,6 +8,7 @@ from pathlib import Path
 
 
 def format_python(file_path: str) -> None:
+    """Auto-format a Python file with ruff."""
     path = Path(file_path)
 
     if path.suffix != ".py":
@@ -22,6 +23,7 @@ def format_python(file_path: str) -> None:
             capture_output=True,
             text=True,
             timeout=30,
+            check=False,
         )
         if result.returncode != 0:
             print(f"Warning: ruff format failed: {result.stderr}", file=sys.stderr)
@@ -32,6 +34,7 @@ def format_python(file_path: str) -> None:
                 capture_output=True,
                 text=True,
                 timeout=30,
+                check=False,
             )
     except subprocess.TimeoutExpired:
         print("Warning: ruff format timed out", file=sys.stderr)
