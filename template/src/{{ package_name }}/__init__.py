@@ -1,4 +1,4 @@
-"""{{ cookiecutter.project_slug }}: {{ cookiecutter.description }}."""
+"""{{project_slug }}: {{description }}."""
 
 __version__ = "0.1.0"
 

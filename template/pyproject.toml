@@ -3,14 +3,14 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "{{ cookiecutter.project_slug }}"
+name = "{{project_slug }}"
 version = "0.1.0"
-description = "{{ cookiecutter.description }}"
+description = "{{description }}"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
 authors = [
-    { name = "{{ cookiecutter.author_name }}", email = "{{ cookiecutter.author_email }}" },
+    { name = "{{author_name }}", email = "{{author_email }}" },
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -104,3 +104,11 @@ source = ["src/"]
 [tool.coverage.report]
 show_missing = true
 skip_empty = true
+{%- if registry_url %}
+
+[[tool.uv.index]]
+name = "private"
+url = "{{ registry_url }}"
+publish-url = "{{ registry_url }}"
+explicit = true
+{%- endif %}

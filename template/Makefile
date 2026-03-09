@@ -1,4 +1,7 @@
-.PHONY: install test test-cov lint format typecheck check pre-commit clean build
+.PHONY: init install test test-cov lint format typecheck check pre-commit clean build publish
+
+init: install
+	uv run pre-commit install
 
 install:
 	uv sync
@@ -27,5 +30,16 @@ clean:
 	rm -rf .venv .mypy_cache .ruff_cache .pytest_cache dist *.egg-info htmlcov .coverage
 	find . -type d -name __pycache__ -exec rm -rf {} +
 
-build:
+build: check
 	uv build
+{%- if registry_url %}
+
+INDEX ?= private
+
+publish: build
+	uv publish --index $(INDEX)
+{%- else %}
+
+publish: build
+	uv publish
+{%- endif %}

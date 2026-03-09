@@ -4,7 +4,7 @@ This file provides guidance to Claude Code when working with this repository.
 
 ## Project Overview
 
-This is a Python package (`{{ cookiecutter.project_slug }}`) using a src layout with hatchling as the build backend and uv for dependency management.
+This is a Python package (`{{ project_slug }}`) using a src layout with hatchling as the build backend and uv for dependency management.
 
 ## Common Commands
 
@@ -20,16 +20,17 @@ These commands work on any system with uv installed:
 
 If `make` is available, you can also use:
 
-- `make install` — Install dependencies
+- `make init` — Install dependencies and set up pre-commit hooks
 - `make check` — Run lint + typecheck + test
 - `make test-cov` — Run tests with coverage report
 - `make format` — Auto-fix lint issues and format
+- `make build` — Run checks and build the package
+- `make publish` — Build and publish to registry
 - `make clean` — Remove generated files (.venv, caches, etc.)
-- `make build` — Build the package
 
 ## Project Structure
 
-- `src/{{ cookiecutter.package_name }}/` — Package source code
+- `src/{{ package_name }}/` — Package source code
 - `tests/` — Test files
 
 ## Code Style

@@ -1,0 +1,49 @@
+_subdirectory: template
+_templates_suffix: ""
+_min_copier_version: "9.0.0"
+
+_exclude:
+  - "~*"
+  - "*.py[co]"
+  - "__pycache__"
+  - ".git"
+  - ".DS_Store"
+  - ".ruff_cache"
+  - ".mypy_cache"
+  - ".pytest_cache"
+  - ".venv"
+
+project_name:
+  type: str
+  default: "My Package"
+  help: Human-readable project name
+
+project_slug:
+  type: str
+  default: "{{ project_name | lower | replace(' ', '-') }}"
+  help: Kebab-case name for the directory and PyPI
+
+package_name:
+  type: str
+  default: "{{ project_slug | replace('-', '_') }}"
+  help: Python import name
+
+description:
+  type: str
+  default: "A short description of the project"
+
+author_name:
+  type: str
+  default: "Your Name"
+
+author_email:
+  type: str
+  default: "you@example.com"
+
+registry_url:
+  type: str
+  default: ""
+  help: Package registry URL for publishing (leave empty for PyPI)
+
+_tasks:
+  - "uv sync"

@@ -1,6 +1,6 @@
-"""Tests for {{ cookiecutter.package_name }}."""
+"""Tests for {{package_name }}."""
 
-from {{ cookiecutter.package_name }} import __version__, hello
+from {{package_name }} import __version__, hello
 
 
 def test_version() -> None:
