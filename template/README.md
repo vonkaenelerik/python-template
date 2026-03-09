@@ -55,36 +55,28 @@ make init         # install dependencies and set up pre-commit hooks
 |---|---|---|
 | Build the package | `uv build` | `make build` (runs `check` first) |
 {%- if registry_url %}
-| Publish to registry | `uv publish --index private` | `make publish` (runs `build` first) |
+| Publish to registry | `uv publish --publish-url {{ registry_url }}` | `make publish` (runs `build` first) |
 {%- else %}
 | Publish to PyPI | `uv publish` | `make publish` (runs `build` first) |
 {%- endif %}
 
 #### Publishing to a custom registry
 
-Package registries are configured in `pyproject.toml` using `[[tool.uv.index]]`:
-
-```toml
-[[tool.uv.index]]
-name = "my-registry"
-url = "https://my-registry.example.com/simple/"
-publish-url = "https://my-registry.example.com/simple/"
-explicit = true
-```
-
-Setting `explicit = true` means `uv sync` won't pull packages from this index — it's only used for publishing. Remove `explicit = true` if you also want to install packages from this registry.
-
-Publish to a named index:
+Publish to a specific registry URL:
 
 ```bash
-uv publish --index my-registry
+uv publish --publish-url https://my-registry.example.com/upload/
 {%- if registry_url %}
-make publish                     # publishes to "private" (default)
-make publish INDEX=my-registry   # publishes to a different index
+
+# or use make (defaults to {{ registry_url }})
+make publish
+make publish PUBLISH_URL=https://other-registry.example.com/upload/
 {%- else %}
-make publish INDEX=my-registry
+make publish PUBLISH_URL=https://my-registry.example.com/upload/
 {%- endif %}
 ```
+
+To configure a registry permanently in `pyproject.toml` (for both resolution and publishing), see the [uv index documentation](https://docs.astral.sh/uv/concepts/indexes/).
 
 ### VSCode
 

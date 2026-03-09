@@ -34,10 +34,10 @@ build: check
 	uv build
 {%- if registry_url %}
 
-INDEX ?= private
+PUBLISH_URL ?= {{ registry_url }}
 
 publish: build
-	uv publish --index $(INDEX)
+	uv publish --publish-url $(PUBLISH_URL)
 {%- else %}
 
 publish: build
