@@ -1,95 +1,85 @@
-# my-package
+# Python Package Template
 
-[![CI](https://github.com/USERNAME/my-package/actions/workflows/ci.yml/badge.svg)](https://github.com/USERNAME/my-package/actions/workflows/ci.yml)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+Cookiecutter template for Python packages. Generates a project with uv, ruff, mypy, pytest, pre-commit, and Claude Code configuration — ready to go out of the box.
 
-A short description of the project.
+## Prerequisites
 
-## Installation
-
-```bash
-pip install my-package
-```
+- [cookiecutter](https://github.com/cookiecutter/cookiecutter) — `pip install cookiecutter` or `uv tool install cookiecutter`
+- [uv](https://docs.astral.sh/uv/) — used for dependency management in generated projects
+- [make](https://www.gnu.org/software/make/) (optional) — for Makefile shortcuts
 
 ## Usage
 
-```python
-from my_package import hello
-
-print(hello("World"))  # Hello, World!
-```
-
-## Development
-
-This project uses [uv](https://docs.astral.sh/uv/) for dependency management.
-
-### Setup
+From Azure DevOps:
 
 ```bash
-git clone https://github.com/USERNAME/my-package.git
-cd my-package
+cookiecutter https://dev.azure.com/ORG/PROJECT/_git/python-template
 
-# Install dependencies
-uv sync
-
-# Install pre-commit hooks
-uv run pre-commit install
-
-# Run tests
-uv run pytest
-
-# Run linting
-uv run ruff check .
-
-# Run type checking
-uv run mypy src/
-
-# Run all pre-commit hooks
-uv run pre-commit run --all-files
+# or via SSH
+cookiecutter git@ssh.dev.azure.com:v3/ORG/PROJECT/python-template
 ```
 
-### VSCode
-
-This project includes workspace settings for VSCode. On first open, install the recommended extensions when prompted (or run `Extensions: Show Recommended Extensions` from the command palette).
-
-**Included extensions:**
-- [Ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff) — Linting and formatting (replaces Pylint, Black, isort)
-- [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python) — Language support, testing UI, debugging
-- [Mypy Type Checker](https://marketplace.visualstudio.com/items?itemName=ms-python.mypy-type-checker) — Inline type error reporting
-
-**What's preconfigured:**
-- Format on save with Ruff
-- Lint errors shown inline as you type
-- Import sorting on save
-- mypy strict mode errors shown inline
-- pytest integration in the Testing sidebar
-- Interpreter set to the `.venv` created by `uv sync`
-
-> **Note:** You must run `uv sync` before opening in VSCode so the `.venv` and all tools are available.
-
-### Renaming the package
-
-To rename from `my-package` to your own package name:
+From a local clone:
 
 ```bash
-python scripts/rename_package.py your-package-name
+cookiecutter python-template/
 ```
 
-## Claude Code
+Pass `--no-input` to skip prompts and use defaults.
 
-This project includes [Claude Code](https://docs.anthropic.com/en/docs/claude-code) configuration for AI-assisted development.
+## Template Variables
 
-Available commands:
-- `/lint` — Run ruff linter and formatter
-- `/typecheck` — Run mypy type checker
-- `/test` — Run pytest
-- `/check-all` — Run all checks (lint, typecheck, test)
-- `/pre-commit` — Run pre-commit hooks
-- `/review` — Code review of current changes
-- `/improve-prompt` — Refine a prompt for Claude Code plan mode
+| Variable | Default | Description |
+|---|---|---|
+| `project_name` | `My Package` | Human-readable name |
+| `project_slug` | *(derived)* | Kebab-case directory/PyPI name (e.g., `my-package`) |
+| `package_name` | *(derived)* | Python import name (e.g., `my_package`) |
+| `description` | `A short description of the project` | One-line description |
+| `author_name` | `Your Name` | For pyproject.toml and LICENSE |
+| `author_email` | `you@example.com` | For pyproject.toml |
+| `github_username` | `USERNAME` | Used in README badges and repo URLs |
 
-## License
+`project_slug` and `package_name` are derived from `project_name` automatically. You can override them if needed.
 
-MIT
+## What Gets Generated
+
+```
+my-package/
+├── src/my_package/        # Package source (with py.typed marker)
+├── tests/
+├── .claude/               # Claude Code commands, hooks, and settings
+├── .vscode/               # Workspace settings and recommended extensions
+├── Makefile
+├── pyproject.toml
+├── .pre-commit-config.yaml
+├── .gitignore
+├── CLAUDE.md
+├── README.md
+└── LICENSE
+```
+
+After generation, the post-gen hook runs automatically:
+
+1. `git init` + initial commit
+2. `uv sync` (installs all dependencies)
+3. `uv run pre-commit install` (sets up pre-commit hooks)
+
+## Included Tooling
+
+- **ruff** — linting and formatting with an aggressive rule set
+- **mypy** — strict mode type checking
+- **pytest + pytest-cov** — testing with coverage support
+- **pre-commit** — ruff, mypy, and standard file checks on every commit
+- **Makefile** — `make check` (lint + typecheck + test), `make test-cov`, `make format`, `make clean`, `make build`
+- **VSCode** — format-on-save, inline lint/type errors, pytest integration
+- **Claude Code** — slash commands (`/lint`, `/test`, `/review`, etc.), auto-format/lint hooks on file edits
+
+## Contributing
+
+To make changes to this template:
+
+1. Clone the repo and edit files inside `{{cookiecutter.project_slug}}/` — these are Jinja2 templates that get rendered during generation
+2. Template variables use `{{ cookiecutter.variable_name }}` syntax
+3. To add or change prompted variables, edit `cookiecutter.json`
+4. Post-generation setup lives in `hooks/post_gen_project.py`
+5. Test locally by running `cookiecutter . --no-input` from the repo root and verifying the output
